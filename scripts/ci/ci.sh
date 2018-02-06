@@ -15,7 +15,7 @@ targets="cardano-sl cardano-sl-auxx cardano-sl-tools cardano-sl-wallet cardano-s
 
 # There are no macOS explorer devs atm and it's only deployed on linux
 if [[ "$OS_NAME" == "linux" ]]; then
-   targets="$targets cardano-sl-explorer-static"
+   targets="$targets cardano-sl-explorer-static cardano-sl-explorer-frontend"
 fi
 
 # TODO: CSL-1133: Add test coverage to CI. To be reenabled when build times
@@ -88,14 +88,10 @@ echo "Done."
 
 # For now we dont have macOS developers on explorer
 if [[ ("$OS_NAME" == "linux") ]]; then
-  # Generate explorer frontend
-  export EXPLORER_EXECUTABLE=$(pwd)/cardano-sl-explorer-static.root/bin/cardano-explorer-hs2purs
-  ./explorer/frontend/scripts/build.sh
-
   echo "Packing up explorer-frontend ..."
   APP_NAME=cardano-sl-explorer
   mkdir -p ${APP_NAME}
-  tar cJf ${APP_NAME}/explorer-frontend-$BUILD_UID.tar.xz explorer/frontend/dist
+  tar cJf ${APP_NAME}/explorer-frontend-$BUILD_UID.tar.xz cardano-sl-explorer-frontend.root
   echo "Uploading.."
   buildkite-agent artifact upload "${APP_NAME}/explorer-frontend-$BUILD_UID.tar.xz" s3://${ARTIFACT_BUCKET} --job $BUILDKITE_JOB_ID
   echo "Done."
