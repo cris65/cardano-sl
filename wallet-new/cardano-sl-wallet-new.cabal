@@ -81,6 +81,7 @@ library
                      , servant-client
                      , servant-server
                      , servant-quickcheck
+                     , servant-swagger-ui
                      , string-conv
                      , swagger2
                      , template-haskell
@@ -189,6 +190,7 @@ executable cardano-new
                      , servant
                      , servant-server
                      , servant-swagger
+                     , servant-swagger-ui
                      , serokell-util
                      , memory
                      , stm

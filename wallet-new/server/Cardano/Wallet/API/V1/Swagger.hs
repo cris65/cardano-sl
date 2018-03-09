@@ -22,8 +22,8 @@ import           Cardano.Wallet.API.V1.Swagger.Example
 import           Cardano.Wallet.API.V1.Types
 import           Cardano.Wallet.TypeLits (KnownSymbols (..))
 import qualified Pos.Core as Core
-import           Pos.Update.Configuration (HasUpdateConfiguration, curSoftwareVersion)
-import           Pos.Util.CompileInfo (HasCompileInfo, compileInfo, ctiGitRevision)
+import           Pos.Core.Update (SoftwareVersion)
+import           Pos.Util.CompileInfo (CompileTimeInfo, ctiGitRevision)
 import           Pos.Wallet.Web.Swagger.Instances.Schema ()
 
 import           Control.Lens ((?~))
@@ -474,12 +474,11 @@ data DescriptionEnvironment = DescriptionEnvironment
   , deSoftwareVersion       :: !T.Text
   }
 
-api :: ( HasCompileInfo
-       , HasUpdateConfiguration
-       , HasSwagger a)
-    => Proxy a
+api :: HasSwagger a
+    => (CompileTimeInfo, SoftwareVersion)
+    -> Proxy a
     -> Swagger
-api walletApi = toSwagger walletApi
+api (compileInfo, curSoftwareVersion) walletAPI = toSwagger walletAPI
   & info.title   .~ "Cardano Wallet API"
   & info.version .~ "2.0"
   & host ?~ "127.0.0.1:8090"
